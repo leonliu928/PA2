@@ -53,20 +53,10 @@ class MoviesController < ApplicationController
       "release_date"
     elsif params[:sort] == "title"
       "title"
-    else
-      params[:sort]
     end
   end
   
   def sort_direction
     %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-  end
-  
-  def hilight(column)
-    if(params[:sort] == column)
-      return 'hilite'
-    else
-      return nil
-    end
   end
 end
