@@ -10,12 +10,22 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.order(sort_column + " " + sort_direction)
     @ratings = Movie.ratings
-    @all_ratings = @ratings
+    @choose_ratings = @ratings
+    
+    if params[:sort]
+      session[:sort] = params[:sort]
+    end
     
     if params[:ratings]
-      @choose_ratings = params[:ratings].keys
-      @movies = Movie.where(rating: @choose_ratings)
+      session[:ratings] = params[:ratings].keys
     end
+    
+    if session[:ratings]
+      @choose_ratings = session[:ratings]
+      @movies = Movie.order(sort_column + " " + sort_direction).where(rating: @choose_ratings)
+    end
+    
+    flash.keep
   end
 
   def new
@@ -54,16 +64,16 @@ class MoviesController < ApplicationController
   end
   
   def sort_column
-    if !Movie.column_names.include?(params[:sort])
-      "rating"
-    elsif params[:sort] == "release_date"
-      "release_date"
-    elsif params[:sort] == "title"
-      "title"
+    if !Movie.column_names.include?(session[:sort])
+      'rating'
+    elsif session[:sort] == 'release_date'
+      'release_date'
+    elsif session[:sort] == 'title'
+      'title'
     end
   end
   
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    %w[asc desc].include?(session[:direction]) ? session[:direction] : 'asc'
   end
 end

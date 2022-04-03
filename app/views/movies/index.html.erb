@@ -3,9 +3,9 @@
 
 <%= form_tag movies_path, :id => "ratings_form", :method => :get do %>
   Include:
-  <%- @all_ratings.each do |rating| %>
+  <%- @ratings.each do |rating| %>
     <%= rating %>
-    <%= check_box_tag "ratings[#{rating}]", :id => "ratings_#{rating}" %>
+    <%= check_box_tag "ratings[#{rating}]", session[:ratings], :id => "ratings_#{rating}" %>
   <% end %>
   <%= submit_tag 'Refresh', :id => "ratings_submit", :class => 'btn btn-primary' %>
 <% end %>
@@ -13,9 +13,9 @@
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
-      <th class="<%= 'hilite bg-warning' if params[:sort] == 'title'%>" id="title_header"><%= sortable "title", "Title"%></th>
+      <th class="<%= 'hilite bg-warning' if session[:sort] == 'title'%>" id="title_header"><%= sortable "title", "Title"%></th>
       <th>Rating</th>
-      <th class="<%= 'hilite bg-warning' if params[:sort] == 'release_date'%>" id="release_date_header"><%= sortable "release_date", "Release Date"%></th>
+      <th class="<%= 'hilite bg-warning' if session[:sort] == 'release_date'%>" id="release_date_header"><%= sortable "release_date", "Release Date"%></th>
       <th>More Info</th>
     </tr>
   </thead>
